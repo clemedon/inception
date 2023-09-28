@@ -13,8 +13,8 @@ services:
     #   test: ["CMD-SHELL", "mysqladmin ping -h localhost -P 3306"]
     networks:
       - inception
-    ports:
-      - "3306:3306"
+    # ports:
+      # - "3306:3306"
     restart: always
     volumes:
       - "mariadb-data:/var/lib/mysql"
@@ -42,8 +42,8 @@ services:
     #   test: ["CMD", "curl", "--fail", "http://localhost:9000"]
     networks:
       - inception
-    ports:
-      - "9000:9000"
+    # ports:
+      # - "9000:9000"
     restart: always
     volumes:
       - "wordpress-data:/var/www/localhost/htdocs"
