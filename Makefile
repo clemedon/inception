@@ -1,27 +1,27 @@
 all: setup build up
 
 setup:
-	-if ! grep -q "cvidon.42.fr" /etc/hosts; then echo "127.0.0.1 cvidon.42.fr" | sudo tee -a /etc/hosts; fi
-	-mkdir -p /home/cvidon/data/wordpress
-	-mkdir -p /home/cvidon/data/mariadb
+	if ! grep -q "cvidon.42.fr" /etc/hosts; then echo "127.0.0.1 cvidon.42.fr" | sudo tee -a /etc/hosts; fi
+	mkdir -p /home/cvidon/data/wordpress
+	mkdir -p /home/cvidon/data/mariadb
 
 build:
-	-docker compose --file srcs/docker-compose.yml build
+	docker compose --file srcs/docker-compose.yml build
 
 up:
-	-docker compose --file srcs/docker-compose.yml up --detach
+	docker compose --file srcs/docker-compose.yml up --detach
 
 stop:
-	-docker compose --file srcs/docker-compose.yml stop
+	docker compose --file srcs/docker-compose.yml stop
 
 down:
-	-docker compose --file srcs/docker-compose.yml down
+	docker compose --file srcs/docker-compose.yml down
 
 prune:
-	-docker system prune --all --force
+	docker system prune --all --force
 
 clean:
-	-docker system prune --all --force --volumes
+	docker system prune --all --force --volumes
 
 fclean:
 	-docker 		stop 		  $$(docker ps -qa)

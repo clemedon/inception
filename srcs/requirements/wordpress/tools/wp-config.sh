@@ -3,19 +3,20 @@
 set -euo pipefail
 
 WP_PATH="/var/www/localhost/htdocs"
-MYSQL_CONNECT_TIMEOUT=100
 
 # Wait for MySQL
-timeout=$MYSQL_CONNECT_TIMEOUT
 while ! mariadb -h$MYSQL_HOST -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE &>/dev/null; do
     echo "Wait for MySQL..."
-    timeout=$((timeout - 1))
-    test "$timeout" = 0 && echo "MariaDB timeout." && exit 1
     sleep 3
 done
 
 if [ ! -f $WP_PATH/wp-config.php ];
 then
+
+    wp core download \
+        --locale=en_EN \
+        --allow-root --path=$WP_PATH
+
     wp config create \
         --allow-root \
         --dbhost=$MYSQL_HOST:3306 \

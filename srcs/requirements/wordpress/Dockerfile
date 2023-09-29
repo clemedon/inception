@@ -6,7 +6,6 @@ RUN apk update && apk upgrade && apk add --no-cache \
     php-fpm \
     php-mysqli \
     php81 \
-    wget \
     curl
 
 # Import config

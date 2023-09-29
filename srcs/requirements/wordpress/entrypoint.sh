@@ -16,11 +16,12 @@ then
 
     # Install WP Config CLI
     apk update && apk add --no-cache php81-phar php81-mbstring
-    wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    # curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     chmod +x wp-cli.phar
     mv wp-cli.phar /usr/local/bin/wp
+    wp --info
     # TODO checksum
-    cd /tmp && ./wp-config.sh && cd / # TODO remove this double cd
+    #cd /tmp && ./wp-config.sh && cd / # TODO remove this double cd
 
     # Import Static page
     mv /tmp/sources/* /$WP_PATH
