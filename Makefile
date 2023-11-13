@@ -1,41 +1,50 @@
+NAME        := inception
+VOLUMES     := ./data
+COMPOSE     := srcs/docker-compose.yml
+
+MAKEFLAGS   += --no-print-directory
+
 all: setup build up
 
+# sets up necessary environment
 setup:
-	-if ! grep -q "cvidon.42.fr" /etc/hosts; then echo "127.0.0.1 cvidon.42.fr" | sudo tee -a /etc/hosts; fi
-	-mkdir -p /home/cvidon/data/wordpress
-	-mkdir -p /home/cvidon/data/mariadb
+	-if ! grep -q "$(NAME).fr" /etc/hosts; then echo "127.0.0.1 $(NAME).fr" | sudo tee -a /etc/hosts; fi
+	-mkdir -p $(VOLUMES)/wordpress
+	-mkdir -p $(VOLUMES)/mariadb
+	echo "[make] setup ok"
 
+# build or update images
 build:
-	-docker compose --file srcs/docker-compose.yml build
+	-docker compose --file $(COMPOSE) build && echo "[make] build ok"
 
+# start and enable services
 up:
-	-docker compose --file srcs/docker-compose.yml up --detach
+	-docker compose --file $(COMPOSE) up --detach && echo "[make] up ok"
 
+# pause services
 stop:
-	-docker compose --file srcs/docker-compose.yml stop
+	-docker compose --file $(COMPOSE) stop && echo "[make] stop ok"
 
+# shutdown and remove services
 down:
-	-docker compose --file srcs/docker-compose.yml down
+	-docker compose --file $(COMPOSE) down && echo "[make] down ok"
 
-prune:
-	-docker system prune --all --force
-
+# remove docker containers, networks and volumes
 clean:
-	-docker system prune --all --force --volumes
+	-docker compose --file $(COMPOSE) down --volumes --remove-orphans && echo "[make] clean ok"
 
+# remove all generated files and modifications !!! like volumes data !!!
 fclean:
-	-docker 		stop 		  $$(docker ps -qa)
-	-docker 		rm 	  --force $$(docker ps -qa)
-	-docker 		rmi   --force $$(docker images -qa)
-	-docker volume  rm 			  $$(docker volume ls -q)
-	-rm -rf /home/cvidon/data
-	-docker network rm 			  $$(docker network ls -q)
-	-sed -i '/cvidon\.42\.fr/d' /etc/hosts
-	-docker builder prune --force
+	$(MAKE) clean
+	-sudo rm -rf $(VOLUMES)
+	-sudo sed -i '/$(NAME)/d' /etc/hosts
+	echo "[make] fclean ok"
 
+# rebuild app from scratch
 re:
 	$(MAKE) clean
 	$(MAKE) all
+	echo "[make] re ok"
 
-.PHONY: all setup build up stop down prune clean fclean re
+.PHONY: setup build up stop down clean fclean re
 .SILENT:

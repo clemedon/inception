@@ -33,3 +33,9 @@
             └── tools
                 └── wp-config.sh
 ```
+```
+  $ git clone https://github.com/clemedon/inception
+  $ cd inception
+  $ make
+  Wait…
+  $ firefox inception.fr
