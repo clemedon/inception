@@ -8,18 +8,24 @@ all: setup build up
 
 # sets up necessary environment
 setup:
+	- touch 1
 	-if ! grep -q "$(NAME).fr" /etc/hosts; then echo "127.0.0.1 $(NAME).fr" | sudo tee -a /etc/hosts; fi
 	-mkdir -p $(VOLUMES)/wordpress
 	-mkdir -p $(VOLUMES)/mariadb
 	echo "[make] setup ok"
+	- touch 2
 
 # build or update images
 build:
+	- touch 3
 	-docker compose --file $(COMPOSE) build && echo "[make] build ok"
+	- touch 4
 
 # start and enable services
 up:
+	- touch 5
 	-docker compose --file $(COMPOSE) up --detach && echo "[make] up ok"
+	- touch 6
 
 # pause services
 stop:
