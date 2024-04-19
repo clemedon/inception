@@ -36,6 +36,7 @@
 ```
   $ git clone https://github.com/clemedon/inception
   $ cd inception
+  $ mv srcs/{env,.env}
   $ make
   Wait…
   $ firefox inception.fr
